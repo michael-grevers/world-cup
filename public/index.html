@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>World Cup Fantasy 2026</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- ── Leaderboard View ─────────────────────────────────────────── -->
+    <div id="view-leaderboard" class="view active">
+      <header class="page-header">
+        <div class="header-top">
+          <span class="logo">⚽</span>
+          <div>
+            <h1>World Cup Fantasy</h1>
+            <p class="subtitle">FIFA World Cup 2026</p>
+          </div>
+        </div>
+        <div id="refresh-info" class="refresh-info"></div>
+      </header>
+
+      <div id="leaderboard" class="leaderboard"></div>
+
+      <div class="scoring-legend">
+        <h3 class="legend-title">Scoring</h3>
+        <div class="legend-grid">
+          <span class="legend-item"><span class="badge champion">🏆</span> Champion +20</span>
+          <span class="legend-item"><span class="badge final">Final</span> +15</span>
+          <span class="legend-item"><span class="badge semi">SF</span> +12</span>
+          <span class="legend-item"><span class="badge qf">QF</span> +6</span>
+          <span class="legend-item"><span class="badge r16">R16</span> +3</span>
+          <span class="legend-item"><span class="badge r32">R32</span> +1</span>
+          <span class="legend-item">Group win +1 each</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Participant Detail View ──────────────────────────────────── -->
+    <div id="view-detail" class="view">
+      <header class="detail-header">
+        <button class="back-btn" id="back-btn">← Leaderboard</button>
+        <div class="detail-title-row">
+          <span id="detail-avatar" class="detail-avatar"></span>
+          <h1 id="detail-name"></h1>
+          <span id="detail-total" class="detail-total-badge"></span>
+        </div>
+      </header>
+
+      <div id="detail-content" class="detail-content"></div>
+    </div>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

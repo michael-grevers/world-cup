@@ -1,0 +1,156 @@
+{
+  "participants": [
+    {
+      "id": 1,
+      "name": "Participant 1",
+      "avatar": "🧢",
+      "teams": [
+        { "name": "Brazil",      "tla": "BRA", "flag": "🇧🇷" },
+        { "name": "France",      "tla": "FRA", "flag": "🇫🇷" },
+        { "name": "England",     "tla": "ENG", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { "name": "Japan",       "tla": "JPN", "flag": "🇯🇵" },
+        { "name": "Morocco",     "tla": "MAR", "flag": "🇲🇦" }
+      ],
+      "players": [
+        { "name": "Player TBD", "team": "Brazil",  "flag": "🇧🇷" },
+        { "name": "Player TBD", "team": "France",  "flag": "🇫🇷" },
+        { "name": "Player TBD", "team": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { "name": "Player TBD", "team": "Japan",   "flag": "🇯🇵" },
+        { "name": "Player TBD", "team": "Morocco", "flag": "🇲🇦" }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Participant 2",
+      "avatar": "🎩",
+      "teams": [
+        { "name": "Argentina",   "tla": "ARG", "flag": "🇦🇷" },
+        { "name": "Spain",       "tla": "ESP", "flag": "🇪🇸" },
+        { "name": "Germany",     "tla": "GER", "flag": "🇩🇪" },
+        { "name": "Portugal",    "tla": "POR", "flag": "🇵🇹" },
+        { "name": "United States","tla": "USA", "flag": "🇺🇸" }
+      ],
+      "players": [
+        { "name": "Player TBD", "team": "Argentina", "flag": "🇦🇷" },
+        { "name": "Player TBD", "team": "Spain",     "flag": "🇪🇸" },
+        { "name": "Player TBD", "team": "Germany",   "flag": "🇩🇪" },
+        { "name": "Player TBD", "team": "Portugal",  "flag": "🇵🇹" },
+        { "name": "Player TBD", "team": "USA",       "flag": "🇺🇸" }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Participant 3",
+      "avatar": "🎯",
+      "teams": [
+        { "name": "Brazil",      "tla": "BRA", "flag": "🇧🇷" },
+        { "name": "Argentina",   "tla": "ARG", "flag": "🇦🇷" },
+        { "name": "France",      "tla": "FRA", "flag": "🇫🇷" },
+        { "name": "Netherlands", "tla": "NED", "flag": "🇳🇱" },
+        { "name": "Mexico",      "tla": "MEX", "flag": "🇲🇽" }
+      ],
+      "players": [
+        { "name": "Player TBD", "team": "Brazil",      "flag": "🇧🇷" },
+        { "name": "Player TBD", "team": "Argentina",   "flag": "🇦🇷" },
+        { "name": "Player TBD", "team": "France",      "flag": "🇫🇷" },
+        { "name": "Player TBD", "team": "Netherlands", "flag": "🇳🇱" },
+        { "name": "Player TBD", "team": "Mexico",      "flag": "🇲🇽" }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Participant 4",
+      "avatar": "🔥",
+      "teams": [
+        { "name": "Germany",     "tla": "GER", "flag": "🇩🇪" },
+        { "name": "Italy",       "tla": "ITA", "flag": "🇮🇹" },
+        { "name": "England",     "tla": "ENG", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { "name": "Belgium",     "tla": "BEL", "flag": "🇧🇪" },
+        { "name": "Uruguay",     "tla": "URU", "flag": "🇺🇾" }
+      ],
+      "players": [
+        { "name": "Player TBD", "team": "Germany", "flag": "🇩🇪" },
+        { "name": "Player TBD", "team": "Italy",   "flag": "🇮🇹" },
+        { "name": "Player TBD", "team": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { "name": "Player TBD", "team": "Belgium", "flag": "🇧🇪" },
+        { "name": "Player TBD", "team": "Uruguay", "flag": "🇺🇾" }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Participant 5",
+      "avatar": "⚡",
+      "teams": [
+        { "name": "Portugal",    "tla": "POR", "flag": "🇵🇹" },
+        { "name": "Spain",       "tla": "ESP", "flag": "🇪🇸" },
+        { "name": "Japan",       "tla": "JPN", "flag": "🇯🇵" },
+        { "name": "United States","tla": "USA","flag": "🇺🇸" },
+        { "name": "Canada",      "tla": "CAN", "flag": "🇨🇦" }
+      ],
+      "players": [
+        { "name": "Player TBD", "team": "Portugal", "flag": "🇵🇹" },
+        { "name": "Player TBD", "team": "Spain",    "flag": "🇪🇸" },
+        { "name": "Player TBD", "team": "Japan",    "flag": "🇯🇵" },
+        { "name": "Player TBD", "team": "USA",      "flag": "🇺🇸" },
+        { "name": "Player TBD", "team": "Canada",   "flag": "🇨🇦" }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Participant 6",
+      "avatar": "🌟",
+      "teams": [
+        { "name": "France",      "tla": "FRA", "flag": "🇫🇷" },
+        { "name": "Brazil",      "tla": "BRA", "flag": "🇧🇷" },
+        { "name": "Germany",     "tla": "GER", "flag": "🇩🇪" },
+        { "name": "Croatia",     "tla": "CRO", "flag": "🇭🇷" },
+        { "name": "Senegal",     "tla": "SEN", "flag": "🇸🇳" }
+      ],
+      "players": [
+        { "name": "Player TBD", "team": "France",  "flag": "🇫🇷" },
+        { "name": "Player TBD", "team": "Brazil",  "flag": "🇧🇷" },
+        { "name": "Player TBD", "team": "Germany", "flag": "🇩🇪" },
+        { "name": "Player TBD", "team": "Croatia", "flag": "🇭🇷" },
+        { "name": "Player TBD", "team": "Senegal", "flag": "🇸🇳" }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Participant 7",
+      "avatar": "🦅",
+      "teams": [
+        { "name": "Argentina",   "tla": "ARG", "flag": "🇦🇷" },
+        { "name": "England",     "tla": "ENG", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { "name": "Netherlands", "tla": "NED", "flag": "🇳🇱" },
+        { "name": "South Korea", "tla": "KOR", "flag": "🇰🇷" },
+        { "name": "Saudi Arabia","tla": "KSA", "flag": "🇸🇦" }
+      ],
+      "players": [
+        { "name": "Player TBD", "team": "Argentina",   "flag": "🇦🇷" },
+        { "name": "Player TBD", "team": "England",     "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { "name": "Player TBD", "team": "Netherlands", "flag": "🇳🇱" },
+        { "name": "Player TBD", "team": "South Korea", "flag": "🇰🇷" },
+        { "name": "Player TBD", "team": "Saudi Arabia","flag": "🇸🇦" }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Participant 8",
+      "avatar": "🎪",
+      "teams": [
+        { "name": "Spain",       "tla": "ESP", "flag": "🇪🇸" },
+        { "name": "Portugal",    "tla": "POR", "flag": "🇵🇹" },
+        { "name": "Mexico",      "tla": "MEX", "flag": "🇲🇽" },
+        { "name": "Morocco",     "tla": "MAR", "flag": "🇲🇦" },
+        { "name": "Australia",   "tla": "AUS", "flag": "🇦🇺" }
+      ],
+      "players": [
+        { "name": "Player TBD", "team": "Spain",     "flag": "🇪🇸" },
+        { "name": "Player TBD", "team": "Portugal",  "flag": "🇵🇹" },
+        { "name": "Player TBD", "team": "Mexico",    "flag": "🇲🇽" },
+        { "name": "Player TBD", "team": "Morocco",   "flag": "🇲🇦" },
+        { "name": "Player TBD", "team": "Australia", "flag": "🇦🇺" }
+      ]
+    }
+  ]
+}

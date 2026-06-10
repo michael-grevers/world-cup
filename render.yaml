@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: worldcup-fantasy
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: FOOTBALL_DATA_API_KEY
+        sync: false
+      - key: NODE_ENV
+        value: production
