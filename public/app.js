@@ -78,7 +78,7 @@ function renderLeaderboard(board) {
         ${subParts.length ? `<div class="row-sub">${subParts.join(' · ')}</div>` : ''}
       </div>
       <div class="row-score">
-        <div class="row-total">${p.total}</div>
+        <div class="row-total">${fmtPts(p.total)}</div>
         <div class="row-pts-label">pts</div>
       </div>
     `;
@@ -158,6 +158,10 @@ function teamStatusHTML(team) {
   return '';
 }
 
+function fmtPts(n) {
+  return n === Math.floor(n) ? String(n) : n.toFixed(1);
+}
+
 function renderDetail(data) {
   // Teams section
   const teamsHTML = data.teams.map(t => {
@@ -165,36 +169,50 @@ function renderDetail(data) {
     const groupInfo = t.groupWins > 0
       ? `<span class="team-group-wins">${t.groupWins} group win${t.groupWins !== 1 ? 's' : ''}</span>`
       : '';
+    const multBadge = t.multiplier > 1
+      ? `<span class="badge tier-mult">${t.multiplier}x</span>`
+      : '';
+    const ptsDetail = t.multiplier > 1 && t.basePts > 0
+      ? `<div class="team-pts-detail">${t.basePts} × ${t.multiplier}</div>`
+      : '';
 
     return `
       <div class="team-card">
         <div class="team-flag">${t.flag || '🌍'}</div>
-        <div>
-          <div class="team-name">${escHtml(t.name)}</div>
+        <div class="team-info">
+          <div class="team-name">${escHtml(t.name)} ${multBadge}</div>
           <div class="team-status">
             ${statusBadge}
             ${groupInfo}
             ${!statusBadge && !groupInfo ? '<span class="team-group-wins">Group stage</span>' : ''}
           </div>
         </div>
-        <div class="team-pts">${t.pts}</div>
+        <div class="team-pts-col">
+          <div class="team-pts">${fmtPts(t.pts)}</div>
+          ${ptsDetail}
+        </div>
       </div>
     `;
   }).join('');
 
   // Players section
   const playersHTML = data.players?.length
-    ? data.players.map(p => `
-        <div class="player-card">
-          <div class="player-flag">${p.flag || '👤'}</div>
-          <div>
-            <div class="player-name">${escHtml(p.name)}</div>
-            <div class="player-team">${escHtml(p.team)}</div>
+    ? data.players.map(p => {
+        const ptsLabel = p.pts > 0
+          ? `${p.pts} pt${p.pts !== 1 ? 's' : ''} <span class="player-goals">(${p.goals}⚽)</span>`
+          : '—';
+        return `
+          <div class="player-card">
+            <div class="player-flag">${p.flag || '👤'}</div>
+            <div>
+              <div class="player-name">${escHtml(p.name)}</div>
+              <div class="player-team">${escHtml(p.team)}</div>
+            </div>
+            <div class="player-pts">${ptsLabel}</div>
           </div>
-          <div class="player-pts">—</div>
-        </div>
-      `).join('')
-    : '<div class="player-tbd">Player scoring coming soon</div>';
+        `;
+      }).join('')
+    : '<div class="player-tbd">No player data yet</div>';
 
   return `
     <div class="section">

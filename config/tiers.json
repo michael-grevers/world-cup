@@ -1,0 +1,94 @@
+{
+  "tiers": [
+    {
+      "tier": 1,
+      "name": "TIER 1",
+      "multiplier": 1.0,
+      "teams": [
+        "Spain",
+        "France",
+        "England",
+        "Portugal",
+        "Brazil"
+      ]
+    },
+    {
+      "tier": 2,
+      "name": "TIER 2",
+      "multiplier": 1.5,
+      "teams": [
+        "Argentina",
+        "Germany",
+        "Netherlands"
+      ]
+    },
+    {
+      "tier": 3,
+      "name": "TIER 3",
+      "multiplier": 2.0,
+      "teams": [
+        "Belgium",
+        "Norway",
+        "Colombia"
+      ]
+    },
+    {
+      "tier": 4,
+      "name": "TIER 4",
+      "multiplier": 2.5,
+      "teams": [
+        "Japan",
+        "Morocco",
+        "Uruguay",
+        "USA",
+        "Mexico",
+        "Turkey",
+        "Switzerland",
+        "Croatia"
+      ]
+    },
+    {
+      "tier": 5,
+      "name": "TIER 5",
+      "multiplier": 3.0,
+      "teams": [
+        "Ecuador",
+        "Austria",
+        "Senegal",
+        "Ivory Coast",
+        "Canada",
+        "Sweden",
+        "Paraguay",
+        "Algeria",
+        "Egypt",
+        "Scotland",
+        "Czechia",
+        "Ghana",
+        "Bosnia",
+        "South Korea",
+        "Iran",
+        "Tunisia"
+      ]
+    },
+    {
+      "tier": 6,
+      "name": "TIER 6",
+      "multiplier": 3.5,
+      "teams": [
+        "DR Congo",
+        "Australia",
+        "Cape Verde",
+        "Uzbekistan",
+        "Haiti",
+        "Panama",
+        "Curacao",
+        "Jordan",
+        "Saudi Arabia",
+        "Iraq",
+        "Qatar",
+        "South Africa",
+        "New Zealand"
+      ]
+    }
+  ]
+}

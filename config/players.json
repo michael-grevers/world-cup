@@ -1,0 +1,57 @@
+{
+  "players": [
+    { "name": "Cristiano Ronaldo", "apiName": "Cristiano Ronaldo",  "teamTla": "POR", "participantId": 1 },
+    { "name": "Raphinha",          "apiName": "Raphinha",           "teamTla": "BRA", "participantId": 1 },
+    { "name": "Romelu Lukaku",     "apiName": "Romelu Lukaku",      "teamTla": "BEL", "participantId": 1 },
+    { "name": "Luis Suarez",       "apiName": "Luis Suárez",        "teamTla": "URU", "participantId": 1 },
+    { "name": "Woltemade",         "apiName": "Nick Woltemade",     "teamTla": "GER", "participantId": 1 },
+
+    { "name": "Kylian Mbappe",     "apiName": "Kylian Mbappé",      "teamTla": "FRA", "participantId": 2 },
+    { "name": "Luis Diaz",         "apiName": "Luis Díaz",          "teamTla": "COL", "participantId": 2 },
+    { "name": "Memphis Depay",     "apiName": "Memphis Depay",      "teamTla": "NED", "participantId": 2 },
+    { "name": "Nico Williams",     "apiName": "Nico Williams",      "teamTla": "ESP", "participantId": 2 },
+    { "name": "Kevin de Bruyne",   "apiName": "Kevin De Bruyne",    "teamTla": "BEL", "participantId": 2 },
+
+    { "name": "Messi",             "apiName": "Lionel Messi",       "teamTla": "ARG", "participantId": 3 },
+    { "name": "Gakpo",             "apiName": "Cody Gakpo",         "teamTla": "NED", "participantId": 3 },
+    { "name": "Dani Olmo",         "apiName": "Dani Olmo",          "teamTla": "ESP", "participantId": 3 },
+    { "name": "Florian Wirtz",     "apiName": "Florian Wirtz",      "teamTla": "GER", "participantId": 3 },
+    { "name": "Marcus Rashford",   "apiName": "Marcus Rashford",    "teamTla": "ENG", "participantId": 3 },
+
+    { "name": "Mikel Oyarzabal",   "apiName": "Mikel Oyarzabal",    "teamTla": "ESP", "participantId": 4 },
+    { "name": "Bruno Fernandes",   "apiName": "Bruno Fernandes",    "teamTla": "POR", "participantId": 4 },
+    { "name": "Bukayo Saka",       "apiName": "Bukayo Saka",        "teamTla": "ENG", "participantId": 4 },
+    { "name": "Folarin Balogun",   "apiName": "Folarin Balogun",    "teamTla": "USA", "participantId": 4 },
+    { "name": "Christian Pulisic", "apiName": "Christian Pulisic",  "teamTla": "USA", "participantId": 4 },
+
+    { "name": "Julian Alvarez",    "apiName": "Julián Álvarez",     "teamTla": "ARG", "participantId": 5 },
+    { "name": "Ousmane Dembele",   "apiName": "Ousmane Dembélé",    "teamTla": "FRA", "participantId": 5 },
+    { "name": "Jude Bellingham",   "apiName": "Jude Bellingham",    "teamTla": "ENG", "participantId": 5 },
+    { "name": "Sadio Mane",        "apiName": "Sadio Mané",         "teamTla": "SEN", "participantId": 5 },
+    { "name": "Goncalo Ramos",     "apiName": "Gonçalo Ramos",      "teamTla": "POR", "participantId": 5 },
+
+    { "name": "Erling Haaland",    "apiName": "Erling Haaland",     "teamTla": "NOR", "participantId": 6 },
+    { "name": "Igor Thiago",       "apiName": "Igor Thiago",        "teamTla": "BRA", "participantId": 6 },
+    { "name": "Ferran Torres",     "apiName": "Ferran Torres",      "teamTla": "ESP", "participantId": 6 },
+    { "name": "De Ketelaere",      "apiName": "Charles De Ketelaere","teamTla": "BEL", "participantId": 6 },
+    { "name": "Brian Brobbery",    "apiName": "Brian Brobbey",      "teamTla": "NED", "participantId": 6 },
+
+    { "name": "Michel Olise",      "apiName": "Michael Olise",      "teamTla": "FRA", "participantId": 7 },
+    { "name": "Lamine Yamal",      "apiName": "Lamine Yamal",       "teamTla": "ESP", "participantId": 7 },
+    { "name": "Desire Doue",       "apiName": "Désiré Doué",        "teamTla": "FRA", "participantId": 7 },
+    { "name": "Leroy Sané",        "apiName": "Leroy Sané",         "teamTla": "GER", "participantId": 7 },
+    { "name": "Leandro Trossard",  "apiName": "Leandro Trossard",   "teamTla": "BEL", "participantId": 7 },
+
+    { "name": "Kai Havertz",       "apiName": "Kai Havertz",        "teamTla": "GER", "participantId": 8 },
+    { "name": "Vini Jr",           "apiName": "Vinícius Júnior",    "teamTla": "BRA", "participantId": 8 },
+    { "name": "Jamal Musiala",     "apiName": "Jamal Musiala",      "teamTla": "GER", "participantId": 8 },
+    { "name": "Mo Salah",          "apiName": "Mohamed Salah",      "teamTla": "EGY", "participantId": 8 },
+    { "name": "Son Heung-min",     "apiName": "Son Heung-min",      "teamTla": "KOR", "participantId": 8 },
+
+    { "name": "Harry Kane",        "apiName": "Harry Kane",         "teamTla": "ENG", "participantId": 9 },
+    { "name": "Lautaro Martinez",  "apiName": "Lautaro Martínez",   "teamTla": "ARG", "participantId": 9 },
+    { "name": "Matheus Cunha",     "apiName": "Matheus Cunha",      "teamTla": "BRA", "participantId": 9 },
+    { "name": "Jeremy Doku",       "apiName": "Jeremy Doku",        "teamTla": "BEL", "participantId": 9 },
+    { "name": "Alexander Isak",    "apiName": "Alexander Isak",     "teamTla": "SWE", "participantId": 9 }
+  ]
+}

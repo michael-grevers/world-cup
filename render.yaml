@@ -6,7 +6,7 @@ services:
     buildCommand: npm install
     startCommand: node server.js
     envVars:
-      - key: FOOTBALL_DATA_API_KEY
-        sync: false
+      - key: FOOTBALL_DATA_API_KEY 
+	sync: false
       - key: NODE_ENV
         value: production

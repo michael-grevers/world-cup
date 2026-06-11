@@ -2,154 +2,173 @@
   "participants": [
     {
       "id": 1,
-      "name": "Participant 1",
-      "avatar": "🧢",
+      "name": "Miguelito",
+      "avatar": "🏆",
       "teams": [
-        { "name": "Brazil",      "tla": "BRA", "flag": "🇧🇷" },
-        { "name": "France",      "tla": "FRA", "flag": "🇫🇷" },
-        { "name": "England",     "tla": "ENG", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
-        { "name": "Japan",       "tla": "JPN", "flag": "🇯🇵" },
-        { "name": "Morocco",     "tla": "MAR", "flag": "🇲🇦" }
+        { "name": "Spain", "tla": "ESP", "flag": "🇪🇸" },
+        { "name": "Canada", "tla": "CAN", "flag": "🇨🇦" },
+        { "name": "Austria", "tla": "AUT", "flag": "🇦🇹" },
+        { "name": "DR Congo", "tla": "COD", "flag": "🇨🇩" },
+        { "name": "Curaçao", "tla": "CUW", "flag": "🇨🇼" }
       ],
       "players": [
-        { "name": "Player TBD", "team": "Brazil",  "flag": "🇧🇷" },
-        { "name": "Player TBD", "team": "France",  "flag": "🇫🇷" },
-        { "name": "Player TBD", "team": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
-        { "name": "Player TBD", "team": "Japan",   "flag": "🇯🇵" },
-        { "name": "Player TBD", "team": "Morocco", "flag": "🇲🇦" }
+        { "name": "Cristiano Ronaldo", "team": "Portugal", "flag": "🇵🇹" },
+        { "name": "Raphinha", "team": "Brazil", "flag": "🇧🇷" },
+        { "name": "Romelu Lukaku", "team": "Belgium", "flag": "🇧🇪" },
+        { "name": "Luis Suarez", "team": "Uruguay", "flag": "🇺🇾" },
+        { "name": "Woltemade", "team": "Germany", "flag": "🇩🇪" }
       ]
     },
     {
       "id": 2,
-      "name": "Participant 2",
+      "name": "TK",
       "avatar": "🎩",
       "teams": [
-        { "name": "Argentina",   "tla": "ARG", "flag": "🇦🇷" },
-        { "name": "Spain",       "tla": "ESP", "flag": "🇪🇸" },
-        { "name": "Germany",     "tla": "GER", "flag": "🇩🇪" },
-        { "name": "Portugal",    "tla": "POR", "flag": "🇵🇹" },
-        { "name": "United States","tla": "USA", "flag": "🇺🇸" }
+        { "name": "France", "tla": "FRA", "flag": "🇫🇷" },
+        { "name": "Ecuador", "tla": "ECU", "flag": "🇪🇨" },
+        { "name": "Switzerland", "tla": "SUI", "flag": "🇨🇭" },
+        { "name": "Tunisia", "tla": "TUN", "flag": "🇹🇳" },
+        { "name": "Australia", "tla": "AUS", "flag": "🇦🇺" }
       ],
       "players": [
-        { "name": "Player TBD", "team": "Argentina", "flag": "🇦🇷" },
-        { "name": "Player TBD", "team": "Spain",     "flag": "🇪🇸" },
-        { "name": "Player TBD", "team": "Germany",   "flag": "🇩🇪" },
-        { "name": "Player TBD", "team": "Portugal",  "flag": "🇵🇹" },
-        { "name": "Player TBD", "team": "USA",       "flag": "🇺🇸" }
+        { "name": "Kylian Mbappe", "team": "France", "flag": "🇫🇷" },
+        { "name": "Luis Diaz", "team": "Colombia", "flag": "🇨🇴" },
+        { "name": "Memphis Depay", "team": "Netherlands", "flag": "🇳🇱" },
+        { "name": "Nico Williams", "team": "Spain", "flag": "🇪🇸" },
+        { "name": "Kevin de Bruyne", "team": "Belgium", "flag": "🇧🇪" }
       ]
     },
     {
       "id": 3,
-      "name": "Participant 3",
-      "avatar": "🎯",
+      "name": "Fiddy",
+      "avatar": "⚽",
       "teams": [
-        { "name": "Brazil",      "tla": "BRA", "flag": "🇧🇷" },
-        { "name": "Argentina",   "tla": "ARG", "flag": "🇦🇷" },
-        { "name": "France",      "tla": "FRA", "flag": "🇫🇷" },
-        { "name": "Netherlands", "tla": "NED", "flag": "🇳🇱" },
-        { "name": "Mexico",      "tla": "MEX", "flag": "🇲🇽" }
+        { "name": "England", "tla": "ENG", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { "name": "Morocco", "tla": "MAR", "flag": "🇲🇦" },
+        { "name": "Croatia", "tla": "CRO", "flag": "🇭🇷" },
+        { "name": "Bosnia", "tla": "BIH", "flag": "🇧🇦" },
+        { "name": "Panama", "tla": "PAN", "flag": "🇵🇦" }
       ],
       "players": [
-        { "name": "Player TBD", "team": "Brazil",      "flag": "🇧🇷" },
-        { "name": "Player TBD", "team": "Argentina",   "flag": "🇦🇷" },
-        { "name": "Player TBD", "team": "France",      "flag": "🇫🇷" },
-        { "name": "Player TBD", "team": "Netherlands", "flag": "🇳🇱" },
-        { "name": "Player TBD", "team": "Mexico",      "flag": "🇲🇽" }
+        { "name": "Messi", "team": "Argentina", "flag": "🇦🇷" },
+        { "name": "Gakpo", "team": "Netherlands", "flag": "🇳🇱" },
+        { "name": "Dani Olmo", "team": "Spain", "flag": "🇪🇸" },
+        { "name": "Florian Wirtz", "team": "Germany", "flag": "🇩🇪" },
+        { "name": "Marcus Rashford", "team": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" }
       ]
     },
     {
       "id": 4,
-      "name": "Participant 4",
-      "avatar": "🔥",
+      "name": "Blanston",
+      "avatar": "🎯",
       "teams": [
-        { "name": "Germany",     "tla": "GER", "flag": "🇩🇪" },
-        { "name": "Italy",       "tla": "ITA", "flag": "🇮🇹" },
-        { "name": "England",     "tla": "ENG", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
-        { "name": "Belgium",     "tla": "BEL", "flag": "🇧🇪" },
-        { "name": "Uruguay",     "tla": "URU", "flag": "🇺🇾" }
+        { "name": "Brazil", "tla": "BRA", "flag": "🇧🇷" },
+        { "name": "Uruguay", "tla": "URU", "flag": "🇺🇾"}, 
+        { "name": "Norway", "tla": "NOR", "flag": "🇳🇴" },
+        { "name": "Paraguay", "tla": "PAR", "flag": "🇵🇾"},
+        { "name": "Cape Verde", "tla": "CPV", "flag": "🇨🇻" }
       ],
       "players": [
-        { "name": "Player TBD", "team": "Germany", "flag": "🇩🇪" },
-        { "name": "Player TBD", "team": "Italy",   "flag": "🇮🇹" },
-        { "name": "Player TBD", "team": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
-        { "name": "Player TBD", "team": "Belgium", "flag": "🇧🇪" },
-        { "name": "Player TBD", "team": "Uruguay", "flag": "🇺🇾" }
+        { "name": "Mikel Oyarzabal", "team": "Spain", "flag": "🇪🇸" },
+        { "name": "Bruno Fernandes", "team": "Portugal", "flag": "🇵🇹" },
+        { "name": "Bukayo Saka", "team": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { "name": "Folarin Balogun", "team": "USA", "flag": "🇺🇸" },
+        { "name": "Christian Pulisic", "team": "USA", "flag": "🇺🇸" }
       ]
     },
     {
       "id": 5,
-      "name": "Participant 5",
+      "name": "Jay",
       "avatar": "⚡",
       "teams": [
-        { "name": "Portugal",    "tla": "POR", "flag": "🇵🇹" },
-        { "name": "Spain",       "tla": "ESP", "flag": "🇪🇸" },
-        { "name": "Japan",       "tla": "JPN", "flag": "🇯🇵" },
-        { "name": "United States","tla": "USA","flag": "🇺🇸" },
-        { "name": "Canada",      "tla": "CAN", "flag": "🇨🇦" }
+        { "name": "Argentina", "tla": "ARG", "flag": "🇦🇷" },
+        { "name": "Mexico", "tla": "MEX", "flag": "🇲🇽" },
+        { "name": "Turkey", "tla": "TUR", "flag": "🇹🇷" },
+        { "name": "Iran", "tla": "IRN", "flag": "🇮🇷" },
+        { "name": "Uzbekistan", "tla": "UZB", "flag": "🇺🇿" }
       ],
       "players": [
-        { "name": "Player TBD", "team": "Portugal", "flag": "🇵🇹" },
-        { "name": "Player TBD", "team": "Spain",    "flag": "🇪🇸" },
-        { "name": "Player TBD", "team": "Japan",    "flag": "🇯🇵" },
-        { "name": "Player TBD", "team": "USA",      "flag": "🇺🇸" },
-        { "name": "Player TBD", "team": "Canada",   "flag": "🇨🇦" }
+        { "name": "Julian Alvarez", "team": "Argentina", "flag": "🇦🇷" },
+        { "name": "Ousmane Dembele", "team": "France", "flag": "🇫🇷" },
+        { "name": "Jude Bellingham", "team": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { "name": "Sadio Mane", "team": "Senegal", "flag": "🇸🇳" },
+        { "name": "Goncalo Ramos", "team": "Portugal", "flag": "🇵🇹"}
       ]
     },
     {
       "id": 6,
-      "name": "Participant 6",
+      "name": "Brock",
       "avatar": "🌟",
       "teams": [
-        { "name": "France",      "tla": "FRA", "flag": "🇫🇷" },
-        { "name": "Brazil",      "tla": "BRA", "flag": "🇧🇷" },
-        { "name": "Germany",     "tla": "GER", "flag": "🇩🇪" },
-        { "name": "Croatia",     "tla": "CRO", "flag": "🇭🇷" },
-        { "name": "Senegal",     "tla": "SEN", "flag": "🇸🇳" }
+        { "name": "Portugal", "tla": "POR", "flag": "🇵🇹" },
+        { "name": "Shakira", "tla": "COL", "flag": "🇨🇴" },
+        { "name": "Egypt", "tla": "EGY", "flag": "🇪🇬" },
+        { "name": "Czechia", "tla": "CZE", "flag": "🇨🇿" },
+        { "name": "New Zealand", "tla": "NZL", "flag": "🇳🇿" }
       ],
       "players": [
-        { "name": "Player TBD", "team": "France",  "flag": "🇫🇷" },
-        { "name": "Player TBD", "team": "Brazil",  "flag": "🇧🇷" },
-        { "name": "Player TBD", "team": "Germany", "flag": "🇩🇪" },
-        { "name": "Player TBD", "team": "Croatia", "flag": "🇭🇷" },
-        { "name": "Player TBD", "team": "Senegal", "flag": "🇸🇳" }
+        { "name": "Erling Haaland", "team": "Norway", "flag": "🇳🇴" },
+        { "name": "Igor Thiago", "team": "Brazil", "flag": "🇧🇷" },
+        { "name": "Ferran Torres", "team": "Spain", "flag": "🇪🇸" },
+        { "name": "De Ketelaere", "team": "Belgium", "flag": "🇧🇪" },
+        { "name": "Brian Brobbery", "team": "Netherlands", "flag": "🇳🇱" }
       ]
     },
     {
       "id": 7,
-      "name": "Participant 7",
+      "name": "Rope Blaster",
       "avatar": "🦅",
       "teams": [
-        { "name": "Argentina",   "tla": "ARG", "flag": "🇦🇷" },
-        { "name": "England",     "tla": "ENG", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
         { "name": "Netherlands", "tla": "NED", "flag": "🇳🇱" },
-        { "name": "South Korea", "tla": "KOR", "flag": "🇰🇷" },
-        { "name": "Saudi Arabia","tla": "KSA", "flag": "🇸🇦" }
+        { "name": "Japan", "tla": "JPN", "flag": "🇯🇵" },
+        { "name": "Senegal", "tla": "SEN", "flag": "🇸🇳" },
+        { "name": "Ghana", "tla": "GHA", "flag": "🇬🇭" },
+        { "name": "Saudi Arabia", "tla": "KSA", "flag": "🇸🇦" }
       ],
       "players": [
-        { "name": "Player TBD", "team": "Argentina",   "flag": "🇦🇷" },
-        { "name": "Player TBD", "team": "England",     "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
-        { "name": "Player TBD", "team": "Netherlands", "flag": "🇳🇱" },
-        { "name": "Player TBD", "team": "South Korea", "flag": "🇰🇷" },
-        { "name": "Player TBD", "team": "Saudi Arabia","flag": "🇸🇦" }
+        { "name": "Michel Olise", "team": "France", "flag": "🇫🇷" },
+        { "name": "Lamine Yamal", "team": "Spain", "flag": "🇪🇸" },
+        { "name": "Desire Doue", "team": "France", "flag": "🇫🇷" },
+        { "name": "Leroy Sané", "team": "Germany", "flag": "🇩🇪" },
+        { "name": "Leandro Trossard", "team": "Belgium", "flag": "🇧🇪" }
       ]
     },
     {
       "id": 8,
-      "name": "Participant 8",
+      "name": "Dali",
       "avatar": "🎪",
       "teams": [
-        { "name": "Spain",       "tla": "ESP", "flag": "🇪🇸" },
-        { "name": "Portugal",    "tla": "POR", "flag": "🇵🇹" },
-        { "name": "Mexico",      "tla": "MEX", "flag": "🇲🇽" },
-        { "name": "Morocco",     "tla": "MAR", "flag": "🇲🇦" },
-        { "name": "Australia",   "tla": "AUS", "flag": "🇦🇺" }
+        { "name": "Germany", "tla": "GER", "flag": "🇩🇪" },
+        { "name": "USA", "tla": "USA", "flag": "🇺🇸" },
+        { "name": "Algeria", "tla": "ALG", "flag": "🇩🇿" },
+        { "name": "South Korea", "tla": "KOR", "flag": "🇰🇷" },
+        { "name": "South Africa", "tla": "RSA", "flag": "🇿🇦" }
       ],
       "players": [
-        { "name": "Player TBD", "team": "Spain",     "flag": "🇪🇸" },
-        { "name": "Player TBD", "team": "Portugal",  "flag": "🇵🇹" },
-        { "name": "Player TBD", "team": "Mexico",    "flag": "🇲🇽" },
-        { "name": "Player TBD", "team": "Morocco",   "flag": "🇲🇦" },
-        { "name": "Player TBD", "team": "Australia", "flag": "🇦🇺" }
+        { "name": "Kai Havertz", "team": "Germany", "flag": "🇩🇪" },
+        { "name": "Vini Jr", "team": "Brazil", "flag": "🇧🇷" },
+        { "name": "Jamal Musiala", "team": "Germany", "flag": "🇩🇪" },
+        { "name": "Mo Salah", "team": "Egypt", "flag": "🇪🇬" },
+        { "name": "Son Heung-min", "team": "South Korea", "flag": "🇰🇷"}
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Eric",
+      "avatar": "🔥",
+      "teams": [
+        { "name": "Belgium", "tla": "BEL", "flag": "🇧🇪" },
+        { "name": "Ivory Coast", "tla": "CIV", "flag": "🇨🇮" },
+        { "name": "Sweden", "tla": "SWE", "flag": "🇸🇪" },
+        { "name": "Scotland", "tla": "SCO", "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿" },
+        { "name": "Haiti", "tla": "HAI", "flag": "🇭🇹" }
+      ],
+      "players": [
+        { "name": "Harry Kane", "team": "England", "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { "name": "Lautaro Martinez", "team": "Argentina", "flag": "🇦🇷" },
+        { "name": "Matheus Cunha", "team": "Brazil", "flag": "🇧🇷" },
+        { "name": "Jeremy Doku", "team": "Belgium", "flag": "🇧🇪" },
+        { "name": "Alexander Isak", "team": "Sweden", "flag": "🇸🇪" }
       ]
     }
   ]
