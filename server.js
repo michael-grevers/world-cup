@@ -7,7 +7,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.FOOTBALL_DATA_API_KEY;
 const WC_API = 'https://api.football-data.org/v4';
+const OPENFOOTBALL_WC_URL = 'https://raw.githubusercontent.com/openfootball/worldcup.json/master/2026/worldcup.json';
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const GOAL_CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
 const { participants } = require('./config/participants.json');
 const { players: draftedPlayers } = require('./config/players.json');
@@ -29,19 +31,18 @@ for (const t of tiers) {
   }
 }
 
-// ── Player lookup: teamTla → [{name, apiNorm, participantId}] ──────────────
+// ── Player lookup for OpenFootball goal matching ───────────────────────────
 function normName(s) {
   return String(s).toLowerCase()
     .normalize('NFD').replace(/[̀-ͯ]/g, '')
     .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-const playersByTeam = {};
-for (const dp of draftedPlayers) {
-  const tla = dp.teamTla.toUpperCase();
-  if (!playersByTeam[tla]) playersByTeam[tla] = [];
-  playersByTeam[tla].push({ name: dp.name, apiNorm: normName(dp.apiName || dp.name), participantId: dp.participantId });
-}
+const draftedForMatch = draftedPlayers.map(dp => ({
+  name: dp.name,
+  apiNorm: normName(dp.apiName || dp.name),
+  participantId: dp.participantId,
+}));
 
 function namesMatch(normScorer, apiNorm) {
   if (normScorer === apiNorm) return true;
@@ -54,6 +55,7 @@ function namesMatch(normScorer, apiNorm) {
 
 // ── Cache ──────────────────────────────────────────────────────────────────
 let cache = { matches: [], fetchedAt: 0 };
+let goalCache = { data: {}, fetchedAt: 0 };
 
 async function getMatches() {
   if (Date.now() - cache.fetchedAt < CACHE_TTL && cache.matches.length > 0) {
@@ -76,6 +78,47 @@ async function getMatches() {
   return cache.matches;
 }
 
+// ── OpenFootball (player goals, synced every 30 minutes) ───────────────────────────
+function scoreGoalsFromOpenFootball(matches) {
+  const result = {};
+  for (const m of matches) {
+    if (!m.score) continue;
+    for (const g of [...(m.goals1 || []), ...(m.goals2 || [])]) {
+      if (g.owngoal || !g.name) continue;
+      const normScorer = normName(g.name);
+      for (const dp of draftedForMatch) {
+        if (namesMatch(normScorer, dp.apiNorm)) {
+          if (!result[dp.participantId]) result[dp.participantId] = {};
+          result[dp.participantId][dp.name] = (result[dp.participantId][dp.name] || 0) + 1;
+          break;
+        }
+      }
+    }
+  }
+  return result;
+}
+
+async function getGoalData(force = false) {
+  if (!force && Date.now() - goalCache.fetchedAt < GOAL_CACHE_TTL) {
+    return goalCache.data;
+  }
+
+  try {
+    const res = await axios.get(OPENFOOTBALL_WC_URL, { timeout: 15000 });
+    const matches = res.data?.matches || [];
+    goalCache.data = scoreGoalsFromOpenFootball(matches);
+    goalCache.fetchedAt = Date.now();
+    const finished = matches.filter(m => m.score).length;
+    console.log(`Synced player goals from OpenFootball (${finished} finished matches)`);
+  } catch (err) {
+    console.error('OpenFootball error:', err.message);
+    if (Object.keys(goalCache.data).length === 0) throw err;
+    console.warn('Serving stale goal cache');
+  }
+
+  return goalCache.data;
+}
+
 // ── Scoring ────────────────────────────────────────────────────────────────
 // Points earned for each round a team reaches (cumulative).
 // 2026 WC has an extra R32 before R16; awarding 1 pt for that new round.
@@ -87,10 +130,14 @@ const ROUND_POINTS = {
   FINAL:          15,
 };
 const CHAMPION_BONUS = 20;
+const GROUP_WIN_PTS = 1;
+const GROUP_DRAW_PTS = 0.5;
+const GOAL_PTS = 3;
 
 function scoreTeam(tla, matches) {
   const t = (tla || '').toUpperCase();
   let groupWins = 0;
+  let groupDraws = 0;
   const roundsSeen = new Set();
   let champion = false;
 
@@ -103,9 +150,11 @@ function scoreTeam(tla, matches) {
     const won =
       (isHome && m.score?.winner === 'HOME_TEAM') ||
       (isAway && m.score?.winner === 'AWAY_TEAM');
+    const drew = m.score?.winner === 'DRAW';
 
     if (m.stage === 'GROUP_STAGE') {
       if (won) groupWins++;
+      else if (drew) groupDraws++;
     } else if (ROUND_POINTS[m.stage] !== undefined) {
       roundsSeen.add(m.stage);
       if (m.stage === 'FINAL' && won) champion = true;
@@ -113,36 +162,14 @@ function scoreTeam(tla, matches) {
     // THIRD_PLACE match: no extra points (team already credited for SEMI_FINALS appearance)
   }
 
-  let pts = groupWins;
+  let pts = groupWins * GROUP_WIN_PTS + groupDraws * GROUP_DRAW_PTS;
   for (const r of roundsSeen) pts += ROUND_POINTS[r];
   if (champion) pts += CHAMPION_BONUS;
 
   const roundsAdvanced = ['LAST_32', 'LAST_16', 'QUARTER_FINALS', 'SEMI_FINALS', 'FINAL']
     .filter(r => roundsSeen.has(r));
 
-  return { pts, groupWins, roundsAdvanced, champion };
-}
-
-function scoreGoals(matches) {
-  // Returns { [participantId]: { [playerName]: goalCount } }
-  const result = {};
-  for (const m of matches) {
-    if (m.status !== 'FINISHED' || !Array.isArray(m.goals)) continue;
-    for (const g of m.goals) {
-      if (g.type === 'OWN_GOAL') continue;
-      if (!g.scorer?.name || !g.team?.tla) continue;
-      const tla = g.team.tla.toUpperCase();
-      const normScorer = normName(g.scorer.name);
-      for (const dp of (playersByTeam[tla] || [])) {
-        if (namesMatch(normScorer, dp.apiNorm)) {
-          if (!result[dp.participantId]) result[dp.participantId] = {};
-          result[dp.participantId][dp.name] = (result[dp.participantId][dp.name] || 0) + 1;
-          break;
-        }
-      }
-    }
-  }
-  return result;
+  return { pts, groupWins, groupDraws, roundsAdvanced, champion };
 }
 
 function buildParticipantData(p, matches, goalData) {
@@ -157,7 +184,7 @@ function buildParticipantData(p, matches, goalData) {
   const participantGoals = goalData[p.id] || {};
   const players = (p.players || []).map(pl => {
     const goals = participantGoals[pl.name] || 0;
-    return { ...pl, goals, pts: goals };
+    return { ...pl, goals, pts: goals * GOAL_PTS };
   });
   const playerPts = players.reduce((s, pl) => s + pl.pts, 0);
   return { ...p, teams, players, teamPts, playerPts, total: teamPts + playerPts };
@@ -168,8 +195,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/leaderboard', async (req, res) => {
   try {
-    const matches = await getMatches();
-    const goalData = scoreGoals(matches);
+    const [matches, goalData] = await Promise.all([getMatches(), getGoalData()]);
     const board = participants
       .map(p => {
         const d = buildParticipantData(p, matches, goalData);
@@ -177,7 +203,13 @@ app.get('/api/leaderboard', async (req, res) => {
       })
       .sort((a, b) => b.total - a.total);
 
-    res.json({ board, fetchedAt: cache.fetchedAt, nextRefresh: cache.fetchedAt + CACHE_TTL });
+    res.json({
+      board,
+      fetchedAt: cache.fetchedAt,
+      nextRefresh: cache.fetchedAt + CACHE_TTL,
+      goalsFetchedAt: goalCache.fetchedAt,
+      goalsNextRefresh: goalCache.fetchedAt + GOAL_CACHE_TTL,
+    });
   } catch (err) {
     res.status(502).json({ error: 'Could not fetch World Cup data', detail: err.message });
   }
@@ -188,8 +220,7 @@ app.get('/api/participant/:id', async (req, res) => {
     const p = participants.find(x => x.id === Number(req.params.id));
     if (!p) return res.status(404).json({ error: 'Participant not found' });
 
-    const matches = await getMatches();
-    const goalData = scoreGoals(matches);
+    const [matches, goalData] = await Promise.all([getMatches(), getGoalData()]);
     res.json(buildParticipantData(p, matches, goalData));
   } catch (err) {
     res.status(502).json({ error: 'Could not fetch World Cup data', detail: err.message });
@@ -199,9 +230,15 @@ app.get('/api/participant/:id', async (req, res) => {
 // Force-bust the cache (useful during live tournament days)
 app.post('/api/refresh', async (req, res) => {
   cache.fetchedAt = 0;
+  goalCache.fetchedAt = 0;
   try {
-    await getMatches();
-    res.json({ ok: true, matches: cache.matches.length, fetchedAt: cache.fetchedAt });
+    const [matches] = await Promise.all([getMatches(), getGoalData(true)]);
+    res.json({
+      ok: true,
+      matches: matches.length,
+      fetchedAt: cache.fetchedAt,
+      goalsFetchedAt: goalCache.fetchedAt,
+    });
   } catch (err) {
     res.status(502).json({ error: err.message });
   }

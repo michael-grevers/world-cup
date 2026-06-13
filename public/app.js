@@ -35,7 +35,7 @@ async function loadLeaderboard() {
   try {
     const data = await fetchJSON('/api/leaderboard');
     renderLeaderboard(data.board);
-    startCountdown(data.fetchedAt, data.nextRefresh);
+    startCountdown(data.fetchedAt, data.nextRefresh, data.goalsFetchedAt, data.goalsNextRefresh);
     scheduleAutoRefresh(data.nextRefresh);
   } catch (err) {
     container.innerHTML = `<div class="error-state">⚠️ ${err.message}<br><small>Check the API key or try again shortly.</small></div>`;
@@ -87,17 +87,32 @@ function renderLeaderboard(board) {
 }
 
 // ── Countdown / auto-refresh ──────────────────────────────────────────────
-function startCountdown(fetchedAt, nextRefresh) {
+function startCountdown(fetchedAt, nextRefresh, goalsFetchedAt, goalsNextRefresh) {
   const el = document.getElementById('refresh-info');
   const render = () => {
     const remaining = Math.max(0, nextRefresh - Date.now());
     const mins = Math.floor(remaining / 60000);
     const secs = Math.floor((remaining % 60000) / 1000);
-    const updated = fetchedAt ? `Updated ${new Date(fetchedAt).toLocaleTimeString()}` : '';
+    const updated = fetchedAt ? `Teams updated ${new Date(fetchedAt).toLocaleTimeString()}` : '';
     const next = remaining > 0
-      ? `next refresh in ${mins > 0 ? `${mins}m ` : ''}${secs}s`
+      ? `teams refresh in ${mins > 0 ? `${mins}m ` : ''}${secs}s`
       : 'refreshing…';
-    el.textContent = updated ? `${updated} · ${next}` : next;
+
+    let goalsPart = '';
+    if (goalsNextRefresh) {
+      const goalRemaining = Math.max(0, goalsNextRefresh - Date.now());
+      const goalMins = Math.floor(goalRemaining / 60000);
+      const goalSecs = Math.floor((goalRemaining % 60000) / 1000);
+      const goalsUpdated = goalsFetchedAt
+        ? `goals updated ${new Date(goalsFetchedAt).toLocaleTimeString()}`
+        : '';
+      const goalsNext = goalRemaining > 0
+        ? `goals refresh in ${goalMins > 0 ? `${goalMins}m ` : ''}${goalSecs}s`
+        : 'goals refreshing…';
+      goalsPart = goalsUpdated ? ` · ${goalsUpdated} · ${goalsNext}` : ` · ${goalsNext}`;
+    }
+
+    el.textContent = updated ? `${updated} · ${next}${goalsPart}` : `${next}${goalsPart}`;
   };
   stopCountdown();
   render();
@@ -166,8 +181,11 @@ function renderDetail(data) {
   // Teams section
   const teamsHTML = data.teams.map(t => {
     const statusBadge = teamStatusHTML(t);
-    const groupInfo = t.groupWins > 0
-      ? `<span class="team-group-wins">${t.groupWins} group win${t.groupWins !== 1 ? 's' : ''}</span>`
+    const groupParts = [];
+    if (t.groupWins > 0) groupParts.push(`${t.groupWins} group win${t.groupWins !== 1 ? 's' : ''}`);
+    if (t.groupDraws > 0) groupParts.push(`${t.groupDraws} draw${t.groupDraws !== 1 ? 's' : ''}`);
+    const groupInfo = groupParts.length
+      ? `<span class="team-group-wins">${groupParts.join(' · ')}</span>`
       : '';
     const multBadge = t.multiplier > 1
       ? `<span class="badge tier-mult">${t.multiplier}x</span>`
@@ -199,7 +217,7 @@ function renderDetail(data) {
   const playersHTML = data.players?.length
     ? data.players.map(p => {
         const ptsLabel = p.pts > 0
-          ? `${p.pts} pt${p.pts !== 1 ? 's' : ''} <span class="player-goals">(${p.goals}⚽)</span>`
+          ? `${fmtPts(p.pts)} pt${p.pts !== 1 ? 's' : ''} <span class="player-goals">(${p.goals}⚽)</span>`
           : '—';
         return `
           <div class="player-card">
