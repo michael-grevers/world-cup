@@ -31,11 +31,40 @@ for (const t of tiers) {
   }
 }
 
+// ── Match display lookups: team owner + players per team ──────────────────
+const teamOwner = {};
+const flagByTla = {};
+for (const p of participants) {
+  for (const t of p.teams) {
+    const tla = t.tla?.toUpperCase();
+    if (tla) {
+      teamOwner[tla] = { name: p.name, avatar: p.avatar, id: p.id };
+      if (t.flag) flagByTla[tla] = t.flag;
+    }
+  }
+}
+
 // ── Player lookup for OpenFootball goal matching ───────────────────────────
 function normName(s) {
   return String(s).toLowerCase()
     .normalize('NFD').replace(/[̀-ͯ]/g, '')
     .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+const playersByTeam = {};
+for (const dp of draftedPlayers) {
+  const tla = dp.teamTla?.toUpperCase();
+  if (!tla) continue;
+  if (!playersByTeam[tla]) playersByTeam[tla] = [];
+  const owner = participants.find(x => x.id === dp.participantId);
+  const plInfo = owner?.players?.find(x => x.name === dp.name);
+  playersByTeam[tla].push({
+    name: dp.name,
+    flag: plInfo?.flag || '👤',
+    participantName: owner?.name || '',
+    participantAvatar: owner?.avatar || '',
+    participantId: dp.participantId,
+  });
 }
 
 const draftedForMatch = draftedPlayers.map(dp => ({
@@ -224,6 +253,49 @@ app.get('/api/participant/:id', async (req, res) => {
     res.json(buildParticipantData(p, matches, goalData));
   } catch (err) {
     res.status(502).json({ error: 'Could not fetch World Cup data', detail: err.message });
+  }
+});
+
+// Today's enriched match schedule (used by the match strip UI)
+app.get('/api/today-matches', async (req, res) => {
+  try {
+    const matches = await getMatches();
+    const date = req.query.date || new Date().toISOString().slice(0, 10);
+
+    const dayMatches = matches
+      .filter(m => m.utcDate?.startsWith(date))
+      .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate));
+
+    const enriched = dayMatches.map(m => {
+      const homeTla = m.homeTeam?.tla?.toUpperCase() || '';
+      const awayTla = m.awayTeam?.tla?.toUpperCase() || '';
+      return {
+        id: m.id,
+        utcDate: m.utcDate,
+        status: m.status,
+        stage: m.stage,
+        homeTeam: {
+          tla: homeTla,
+          name: m.homeTeam?.shortName || m.homeTeam?.name || homeTla || '?',
+          flag: flagByTla[homeTla] || '🏳',
+          owner: teamOwner[homeTla] || null,
+          draftedPlayers: playersByTeam[homeTla] || [],
+          score: m.score?.fullTime?.home ?? null,
+        },
+        awayTeam: {
+          tla: awayTla,
+          name: m.awayTeam?.shortName || m.awayTeam?.name || awayTla || '?',
+          flag: flagByTla[awayTla] || '🏳',
+          owner: teamOwner[awayTla] || null,
+          draftedPlayers: playersByTeam[awayTla] || [],
+          score: m.score?.fullTime?.away ?? null,
+        },
+      };
+    });
+
+    res.json({ matches: enriched, date, fetchedAt: cache.fetchedAt });
+  } catch (err) {
+    res.status(502).json({ error: 'Could not fetch match data', detail: err.message });
   }
 });
 

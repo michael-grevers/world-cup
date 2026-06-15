@@ -3,7 +3,7 @@
     { "name": "Cristiano Ronaldo", "apiName": "Cristiano Ronaldo",  "teamTla": "POR", "participantId": 1 },
     { "name": "Raphinha",          "apiName": "Raphinha",           "teamTla": "BRA", "participantId": 1 },
     { "name": "Romelu Lukaku",     "apiName": "Romelu Lukaku",      "teamTla": "BEL", "participantId": 1 },
-    { "name": "Luis Suarez",       "apiName": "Luis Suárez",        "teamTla": "URU", "participantId": 1 },
+    { "name": "Luis Suarez",       "apiName": "Luis Suárez",        "teamTla": "COL", "participantId": 1 },
     { "name": "Woltemade",         "apiName": "Nick Woltemade",     "teamTla": "GER", "participantId": 1 },
 
     { "name": "Kylian Mbappe",     "apiName": "Kylian Mbappé",      "teamTla": "FRA", "participantId": 2 },

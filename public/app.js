@@ -32,11 +32,22 @@ async function loadLeaderboard() {
   container.innerHTML = '<div class="loading-state">Loading standings…</div>';
   stopCountdown();
 
+  const localDate = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local time
+
   try {
-    const data = await fetchJSON('/api/leaderboard');
+    const [data, matchData] = await Promise.all([
+      fetchJSON('/api/leaderboard'),
+      fetchJSON(`/api/today-matches?date=${localDate}`).catch(() => null),
+    ]);
     renderLeaderboard(data.board);
     startCountdown(data.fetchedAt, data.nextRefresh, data.goalsFetchedAt, data.goalsNextRefresh);
     scheduleAutoRefresh(data.nextRefresh);
+
+    if (matchData?.matches?.length) {
+      renderMatchesStrip(matchData.matches, matchData.date);
+    } else {
+      document.getElementById('matches-section').style.display = 'none';
+    }
   } catch (err) {
     container.innerHTML = `<div class="error-state">⚠️ ${err.message}<br><small>Check the API key or try again shortly.</small></div>`;
   }
@@ -249,6 +260,152 @@ function renderDetail(data) {
     </div>
   `;
 }
+
+// ── Match Strip ───────────────────────────────────────────────────────────
+const STAGE_LABELS = {
+  GROUP_STAGE:    'Group Stage',
+  LAST_32:        'Round of 32',
+  LAST_16:        'Round of 16',
+  QUARTER_FINALS: 'Quarter Final',
+  SEMI_FINALS:    'Semi Final',
+  THIRD_PLACE:    '3rd Place',
+  FINAL:          'Final',
+};
+
+function renderMatchesStrip(matches, date) {
+  const section = document.getElementById('matches-section');
+  const strip   = document.getElementById('matches-strip');
+  const label   = section.querySelector('.matches-date-label');
+
+  const d = new Date(date + 'T12:00:00');
+  label.textContent = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+  strip.innerHTML = '';
+  matches.forEach(m => {
+    const isLive     = m.status === 'IN_PLAY' || m.status === 'PAUSED';
+    const isFinished = m.status === 'FINISHED';
+    const hasScore   = (isLive || isFinished) && m.homeTeam.score !== null && m.awayTeam.score !== null;
+
+    let statusHTML;
+    if (isLive) {
+      statusHTML = `<div class="match-status live-status"><span class="live-dot"></span>LIVE</div>`;
+    } else if (isFinished) {
+      statusHTML = `<div class="match-status finished-status">FT</div>`;
+    } else {
+      const t = new Date(m.utcDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      statusHTML = `<div class="match-status time-status">${t}</div>`;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'match-card' + (isLive ? ' is-live' : '');
+    card.innerHTML = `
+      ${statusHTML}
+      <div class="match-teams">
+        <div class="match-team home">
+          <span class="match-flag">${m.homeTeam.flag}</span>
+          <span class="match-tla">${escHtml(m.homeTeam.tla || '?')}</span>
+        </div>
+        <div class="match-center">
+          ${hasScore
+            ? `<span class="match-score">${m.homeTeam.score}–${m.awayTeam.score}</span>`
+            : `<span class="match-vs">vs</span>`}
+        </div>
+        <div class="match-team away">
+          <span class="match-tla">${escHtml(m.awayTeam.tla || '?')}</span>
+          <span class="match-flag">${m.awayTeam.flag}</span>
+        </div>
+      </div>
+      <div class="match-owners">
+        <span class="owner-chip">${m.homeTeam.owner ? m.homeTeam.owner.avatar : '—'}</span>
+        <span class="owner-chip">${m.awayTeam.owner ? m.awayTeam.owner.avatar : '—'}</span>
+      </div>
+    `;
+    card.addEventListener('click', () => openMatchModal(m));
+    strip.appendChild(card);
+  });
+
+  section.style.display = 'block';
+}
+
+// ── Match Modal ───────────────────────────────────────────────────────────
+function openMatchModal(m) {
+  const modal   = document.getElementById('match-modal');
+  const content = document.getElementById('modal-content');
+
+  const isLive     = m.status === 'IN_PLAY' || m.status === 'PAUSED';
+  const isFinished = m.status === 'FINISHED';
+  const hasScore   = (isLive || isFinished) && m.homeTeam.score !== null && m.awayTeam.score !== null;
+
+  const matchTime = new Date(m.utcDate).toLocaleString([], {
+    weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+  });
+
+  let statusLabel;
+  if (isLive)          statusLabel = '<span class="live-dot"></span>LIVE';
+  else if (isFinished) statusLabel = 'Full Time';
+  else                 statusLabel = matchTime;
+
+  const stageLabel = STAGE_LABELS[m.stage] || m.stage || '';
+
+  const allPlayers = [
+    ...m.homeTeam.draftedPlayers.map(p => ({ ...p, teamFlag: m.homeTeam.flag })),
+    ...m.awayTeam.draftedPlayers.map(p => ({ ...p, teamFlag: m.awayTeam.flag })),
+  ];
+
+  const playersHTML = allPlayers.length
+    ? allPlayers.map(p => `
+        <div class="modal-player">
+          <span class="modal-player-flag">${p.flag}</span>
+          <span class="modal-player-name">${escHtml(p.name)}</span>
+          <span class="modal-player-owner">${escHtml(p.participantAvatar)} ${escHtml(p.participantName)}</span>
+        </div>
+      `).join('')
+    : '<div class="modal-no-players">No drafted players in this match</div>';
+
+  const ownerChip = (team) => team.owner
+    ? `<div class="modal-team-owner">${team.owner.avatar} ${escHtml(team.owner.name)}</div>`
+    : `<div class="modal-team-owner unowned">Undrafted</div>`;
+
+  content.innerHTML = `
+    <div class="modal-stage">${escHtml(stageLabel)}</div>
+    <div class="modal-teams-row">
+      <div class="modal-team">
+        <div class="modal-team-flag">${m.homeTeam.flag}</div>
+        <div class="modal-team-name">${escHtml(m.homeTeam.name)}</div>
+        ${ownerChip(m.homeTeam)}
+      </div>
+      <div class="modal-score-col">
+        ${hasScore
+          ? `<div class="modal-score">${m.homeTeam.score}–${m.awayTeam.score}</div>`
+          : `<div class="modal-vs">vs</div>`}
+        <div class="modal-status-label">${statusLabel}</div>
+      </div>
+      <div class="modal-team">
+        <div class="modal-team-flag">${m.awayTeam.flag}</div>
+        <div class="modal-team-name">${escHtml(m.awayTeam.name)}</div>
+        ${ownerChip(m.awayTeam)}
+      </div>
+    </div>
+    ${allPlayers.length ? `
+      <div class="modal-players-section">
+        <div class="modal-section-label">Drafted Players</div>
+        ${playersHTML}
+      </div>
+    ` : `<div class="modal-no-players">No drafted players in this match</div>`}
+  `;
+
+  modal.style.display = 'flex';
+}
+
+document.getElementById('modal-close').addEventListener('click', () => {
+  document.getElementById('match-modal').style.display = 'none';
+});
+document.getElementById('match-modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) e.currentTarget.style.display = 'none';
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('match-modal').style.display = 'none';
+});
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 async function fetchJSON(url) {

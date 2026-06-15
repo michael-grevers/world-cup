@@ -15,7 +15,7 @@
         { "name": "Cristiano Ronaldo", "team": "Portugal", "flag": "🇵🇹" },
         { "name": "Raphinha", "team": "Brazil", "flag": "🇧🇷" },
         { "name": "Romelu Lukaku", "team": "Belgium", "flag": "🇧🇪" },
-        { "name": "Luis Suarez", "team": "Uruguay", "flag": "🇺🇾" },
+        { "name": "Luis Suarez", "team": "Colombia", "flag": "🇨🇴" },
         { "name": "Woltemade", "team": "Germany", "flag": "🇩🇪" }
       ]
     },
@@ -63,7 +63,7 @@
       "avatar": "🎯",
       "teams": [
         { "name": "Brazil", "tla": "BRA", "flag": "🇧🇷" },
-        { "name": "Uruguay", "tla": "URU", "flag": "🇺🇾"}, 
+        { "name": "Uruguay", "tla": "URY", "flag": "🇺🇾"}, 
         { "name": "Norway", "tla": "NOR", "flag": "🇳🇴" },
         { "name": "Paraguay", "tla": "PAR", "flag": "🇵🇾"},
         { "name": "Cape Verde", "tla": "CPV", "flag": "🇨🇻" }
