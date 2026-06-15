@@ -357,6 +357,7 @@ function openMatchModal(m) {
         <div class="modal-player">
           <span class="modal-player-flag">${p.flag}</span>
           <span class="modal-player-name">${escHtml(p.name)}</span>
+          ${p.goals > 0 ? `<span class="modal-player-goals">⚽${p.goals > 1 ? `×${p.goals}` : ''}</span>` : ''}
           <span class="modal-player-owner">${escHtml(p.participantAvatar)} ${escHtml(p.participantName)}</span>
         </div>
       `).join('')

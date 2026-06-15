@@ -110,20 +110,25 @@ async function getMatches() {
 // ── OpenFootball (player goals, synced every 30 minutes) ───────────────────────────
 function scoreGoalsFromOpenFootball(matches) {
   const result = {};
+  let totalGoals = 0, matchedGoals = 0;
   for (const m of matches) {
     if (!m.score) continue;
     for (const g of [...(m.goals1 || []), ...(m.goals2 || [])]) {
       if (g.owngoal || !g.name) continue;
+      totalGoals++;
       const normScorer = normName(g.name);
       for (const dp of draftedForMatch) {
         if (namesMatch(normScorer, dp.apiNorm)) {
           if (!result[dp.participantId]) result[dp.participantId] = {};
           result[dp.participantId][dp.name] = (result[dp.participantId][dp.name] || 0) + 1;
+          matchedGoals++;
+          console.log(`⚽ Goal matched: ${g.name} → ${dp.name} (participant ${dp.participantId})`);
           break;
         }
       }
     }
   }
+  console.log(`OpenFootball: ${totalGoals} goals processed, ${matchedGoals} matched to drafted players`);
   return result;
 }
 
@@ -259,12 +264,18 @@ app.get('/api/participant/:id', async (req, res) => {
 // Today's enriched match schedule (used by the match strip UI)
 app.get('/api/today-matches', async (req, res) => {
   try {
-    const matches = await getMatches();
+    const [matches, goalData] = await Promise.all([getMatches(), getGoalData()]);
     const date = req.query.date || new Date().toISOString().slice(0, 10);
 
     const dayMatches = matches
       .filter(m => m.utcDate?.startsWith(date))
       .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate));
+
+    const enrichedPlayers = (tla) =>
+      (playersByTeam[tla] || []).map(p => ({
+        ...p,
+        goals: goalData[p.participantId]?.[p.name] || 0,
+      }));
 
     const enriched = dayMatches.map(m => {
       const homeTla = m.homeTeam?.tla?.toUpperCase() || '';
@@ -279,7 +290,7 @@ app.get('/api/today-matches', async (req, res) => {
           name: m.homeTeam?.shortName || m.homeTeam?.name || homeTla || '?',
           flag: flagByTla[homeTla] || '🏳',
           owner: teamOwner[homeTla] || null,
-          draftedPlayers: playersByTeam[homeTla] || [],
+          draftedPlayers: enrichedPlayers(homeTla),
           score: m.score?.fullTime?.home ?? null,
         },
         awayTeam: {
@@ -287,7 +298,7 @@ app.get('/api/today-matches', async (req, res) => {
           name: m.awayTeam?.shortName || m.awayTeam?.name || awayTla || '?',
           flag: flagByTla[awayTla] || '🏳',
           owner: teamOwner[awayTla] || null,
-          draftedPlayers: playersByTeam[awayTla] || [],
+          draftedPlayers: enrichedPlayers(awayTla),
           score: m.score?.fullTime?.away ?? null,
         },
       };
@@ -297,6 +308,15 @@ app.get('/api/today-matches', async (req, res) => {
   } catch (err) {
     res.status(502).json({ error: 'Could not fetch match data', detail: err.message });
   }
+});
+
+// Debug: show raw goal cache contents
+app.get('/api/debug/goals', (req, res) => {
+  res.json({
+    fetchedAt: goalCache.fetchedAt ? new Date(goalCache.fetchedAt).toISOString() : null,
+    ageSeconds: goalCache.fetchedAt ? Math.floor((Date.now() - goalCache.fetchedAt) / 1000) : null,
+    data: goalCache.data,
+  });
 });
 
 // Force-bust the cache (useful during live tournament days)
