@@ -33,11 +33,14 @@ async function loadLeaderboard() {
   stopCountdown();
 
   const localDate = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD local time
+  const [y, mo, d] = localDate.split('-').map(Number);
+  const fromUTC = new Date(y, mo - 1, d).toISOString();
+  const toUTC   = new Date(y, mo - 1, d + 1).toISOString();
 
   try {
     const [data, matchData] = await Promise.all([
       fetchJSON('/api/leaderboard'),
-      fetchJSON(`/api/today-matches?date=${localDate}`).catch(() => null),
+      fetchJSON(`/api/today-matches?date=${localDate}&from=${encodeURIComponent(fromUTC)}&to=${encodeURIComponent(toUTC)}`).catch(() => null),
     ]);
     renderLeaderboard(data.board);
     startCountdown(data.fetchedAt, data.nextRefresh, data.goalsFetchedAt, data.goalsNextRefresh);

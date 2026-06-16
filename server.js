@@ -265,10 +265,15 @@ app.get('/api/participant/:id', async (req, res) => {
 app.get('/api/today-matches', async (req, res) => {
   try {
     const [matches, goalData] = await Promise.all([getMatches(), getGoalData()]);
-    const date = req.query.date || new Date().toISOString().slice(0, 10);
+    const date = req.query.date || new Date().toLocaleDateString('en-CA');
+    const from = req.query.from;
+    const to   = req.query.to;
 
     const dayMatches = matches
-      .filter(m => m.utcDate?.startsWith(date))
+      .filter(m => {
+        if (from && to) return m.utcDate >= from && m.utcDate < to;
+        return m.utcDate?.startsWith(date);
+      })
       .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate));
 
     const enrichedPlayers = (tla) =>
