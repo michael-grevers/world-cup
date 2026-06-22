@@ -15,6 +15,14 @@ const { participants } = require('./config/participants.json');
 const { players: draftedPlayers } = require('./config/players.json');
 const { tiers } = require('./config/tiers.json');
 
+// ── TLA normalization: map API variants to the canonical TLA used in participants.json ──
+// Some APIs use different 3-letter codes for the same team (e.g. URU vs URY for Uruguay)
+const TLA_NORMALIZE = { 'URU': 'URY' };
+function normTla(tla) {
+  const u = (tla || '').toUpperCase();
+  return TLA_NORMALIZE[u] || u;
+}
+
 // ── Tier lookup: team name → { multiplier, tier } ─────────────────────────
 // Nicknames used in participants.json that don't match tiers.json team names
 const TEAM_ALIASES = { 'shakira': 'colombia' };
@@ -177,8 +185,8 @@ function scoreTeam(tla, matches) {
 
   for (const m of matches) {
     if (m.status !== 'FINISHED') continue;
-    const isHome = m.homeTeam?.tla?.toUpperCase() === t;
-    const isAway = m.awayTeam?.tla?.toUpperCase() === t;
+    const isHome = normTla(m.homeTeam?.tla) === t;
+    const isAway = normTla(m.awayTeam?.tla) === t;
     if (!isHome && !isAway) continue;
 
     const won =
@@ -283,8 +291,8 @@ app.get('/api/today-matches', async (req, res) => {
       }));
 
     const enriched = dayMatches.map(m => {
-      const homeTla = m.homeTeam?.tla?.toUpperCase() || '';
-      const awayTla = m.awayTeam?.tla?.toUpperCase() || '';
+      const homeTla = normTla(m.homeTeam?.tla) || '';
+      const awayTla = normTla(m.awayTeam?.tla) || '';
       return {
         id: m.id,
         utcDate: m.utcDate,
