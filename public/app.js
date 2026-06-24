@@ -38,9 +38,10 @@ async function loadLeaderboard() {
   const toUTC   = new Date(y, mo - 1, d + 1).toISOString();
 
   try {
-    const [data, matchData] = await Promise.all([
+    const [data, matchData, perfData] = await Promise.all([
       fetchJSON('/api/leaderboard'),
       fetchJSON(`/api/today-matches?date=${localDate}&from=${encodeURIComponent(fromUTC)}&to=${encodeURIComponent(toUTC)}`).catch(() => null),
+      fetchJSON('/api/top-performers').catch(() => null),
     ]);
     renderLeaderboard(data.board);
     startCountdown(data.fetchedAt, data.nextRefresh, data.goalsFetchedAt, data.goalsNextRefresh);
@@ -51,6 +52,8 @@ async function loadLeaderboard() {
     } else {
       document.getElementById('matches-section').style.display = 'none';
     }
+
+    if (perfData) renderTopPerformers(perfData);
   } catch (err) {
     container.innerHTML = `<div class="error-state">⚠️ ${err.message}<br><small>Check the API key or try again shortly.</small></div>`;
   }
@@ -99,6 +102,88 @@ function renderLeaderboard(board) {
     container.appendChild(row);
   });
 }
+
+// ── Top Performers ───────────────────────────────────────────────────────
+const TOP_RANK_EMOJI = ['', '🥇', '🥈', '🥉', '4', '5'];
+
+function renderTopPerformers(data) {
+  const teamsEl = document.getElementById('top-teams');
+  const playersEl = document.getElementById('top-players');
+
+  teamsEl.innerHTML = data.topTeams.map((t, i) => {
+    const rank = i + 1;
+    const rankDisplay = rank <= 3 ? TOP_RANK_EMOJI[rank] : rank;
+    const rankCls = rank <= 3 ? ['', 'gold', 'silver', 'bronze'][rank] : '';
+
+    const roundBadges = (t.roundsAdvanced || [])
+      .map(r => {
+        const meta = { LAST_32: 'R32', LAST_16: 'R16', QUARTER_FINALS: 'QF', SEMI_FINALS: 'SF', FINAL: 'Final' };
+        return meta[r] || r;
+      })
+      .join(', ');
+    const statParts = [];
+    if (t.groupWins > 0) statParts.push(`${t.groupWins}W`);
+    if (t.groupDraws > 0) statParts.push(`${t.groupDraws}D`);
+    if (roundBadges) statParts.push(roundBadges);
+    if (t.champion) statParts.push('Champion');
+    const statsText = statParts.length ? statParts.join(' · ') : 'Group stage';
+
+    const multBadge = t.multiplier > 1
+      ? `<span class="badge tier-mult">${t.multiplier}x</span>`
+      : '';
+
+    return `
+      <div class="top-row">
+        <div class="top-rank ${rankCls}">${rankDisplay}</div>
+        <div class="top-flag">${t.flag || '🌍'}</div>
+        <div class="top-info">
+          <div class="top-name">${escHtml(t.name)} ${multBadge}</div>
+          <div class="top-stats">${statsText}</div>
+          <div class="top-owner">${t.owner.avatar} ${escHtml(t.owner.name)}</div>
+        </div>
+        <div class="top-pts-col">
+          <div class="top-pts">${fmtPts(t.pts)}</div>
+          <div class="top-pts-label">pts</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  playersEl.innerHTML = data.topPlayers.map((p, i) => {
+    const rank = i + 1;
+    const rankDisplay = rank <= 3 ? TOP_RANK_EMOJI[rank] : rank;
+    const rankCls = rank <= 3 ? ['', 'gold', 'silver', 'bronze'][rank] : '';
+
+    const goalText = p.goals > 0 ? `${p.goals} goal${p.goals !== 1 ? 's' : ''}` : 'No goals';
+
+    return `
+      <div class="top-row">
+        <div class="top-rank ${rankCls}">${rankDisplay}</div>
+        <div class="top-flag">${p.flag || '👤'}</div>
+        <div class="top-info">
+          <div class="top-name">${escHtml(p.name)}</div>
+          <div class="top-stats">${goalText} · ${escHtml(p.team)}</div>
+          <div class="top-owner">${p.owner.avatar} ${escHtml(p.owner.name)}</div>
+        </div>
+        <div class="top-pts-col">
+          <div class="top-pts">${fmtPts(p.pts)}</div>
+          <div class="top-pts-label">pts</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+}
+
+// ── Tab Switching ────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
 
 // ── Countdown / auto-refresh ──────────────────────────────────────────────
 function startCountdown(fetchedAt, nextRefresh, goalsFetchedAt, goalsNextRefresh) {

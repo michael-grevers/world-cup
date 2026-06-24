@@ -23,14 +23,38 @@
         <div id="refresh-info" class="refresh-info"></div>
       </header>
 
-      <div id="matches-section" class="matches-section" style="display:none">
-        <div class="matches-header">
-          <span class="matches-date-label"></span>
+      <nav class="tab-bar">
+        <button class="tab-btn active" data-tab="standings">Standings</button>
+        <button class="tab-btn" data-tab="top-performers">Leaderboards</button>
+      </nav>
+
+      <div id="tab-standings" class="tab-panel active">
+        <div id="matches-section" class="matches-section" style="display:none">
+          <div class="matches-header">
+            <span class="matches-date-label"></span>
+          </div>
+          <div id="matches-strip" class="matches-strip"></div>
         </div>
-        <div id="matches-strip" class="matches-strip"></div>
+
+        <div id="leaderboard" class="leaderboard"></div>
       </div>
 
-      <div id="leaderboard" class="leaderboard"></div>
+      <div id="tab-top-performers" class="tab-panel">
+        <div class="top-performers">
+          <div class="top-section">
+            <div class="top-section-header">
+              <span class="top-section-label">Top 5 Teams</span>
+            </div>
+            <div id="top-teams" class="top-list"></div>
+          </div>
+          <div class="top-section">
+            <div class="top-section-header">
+              <span class="top-section-label">Top 5 Players</span>
+            </div>
+            <div id="top-players" class="top-list"></div>
+          </div>
+        </div>
+      </div>
 
       <div class="scoring-legend">
         <h3 class="legend-title">Scoring</h3>

@@ -269,6 +269,42 @@ app.get('/api/participant/:id', async (req, res) => {
   }
 });
 
+// Top 5 teams & top 5 players across all participants
+app.get('/api/top-performers', async (req, res) => {
+  try {
+    const [matches, goalData] = await Promise.all([getMatches(), getGoalData()]);
+    const allTeams = [];
+    const allPlayers = [];
+
+    for (const p of participants) {
+      const d = buildParticipantData(p, matches, goalData);
+      for (const t of d.teams) {
+        allTeams.push({
+          name: t.name, tla: t.tla, flag: t.flag,
+          pts: t.pts, basePts: t.basePts, multiplier: t.multiplier, tier: t.tier,
+          groupWins: t.groupWins, groupDraws: t.groupDraws,
+          roundsAdvanced: t.roundsAdvanced, champion: t.champion,
+          owner: { name: p.name, avatar: p.avatar, id: p.id },
+        });
+      }
+      for (const pl of d.players) {
+        allPlayers.push({
+          name: pl.name, team: pl.team, flag: pl.flag,
+          goals: pl.goals, pts: pl.pts,
+          owner: { name: p.name, avatar: p.avatar, id: p.id },
+        });
+      }
+    }
+
+    const topTeams = allTeams.sort((a, b) => b.pts - a.pts || b.groupWins - a.groupWins).slice(0, 5);
+    const topPlayers = allPlayers.sort((a, b) => b.goals - a.goals || b.pts - a.pts).slice(0, 5);
+
+    res.json({ topTeams, topPlayers });
+  } catch (err) {
+    res.status(502).json({ error: 'Could not fetch data', detail: err.message });
+  }
+});
+
 // Today's enriched match schedule (used by the match strip UI)
 app.get('/api/today-matches', async (req, res) => {
   try {
