@@ -115,18 +115,11 @@ function renderTopPerformers(data) {
     const rankDisplay = rank <= 3 ? TOP_RANK_EMOJI[rank] : rank;
     const rankCls = rank <= 3 ? ['', 'gold', 'silver', 'bronze'][rank] : '';
 
-    const roundBadges = (t.roundsAdvanced || [])
-      .map(r => {
-        const meta = { LAST_32: 'R32', LAST_16: 'R16', QUARTER_FINALS: 'QF', SEMI_FINALS: 'SF', FINAL: 'Final' };
-        return meta[r] || r;
-      })
-      .join(', ');
+    const roundBadgesHTML = teamStatusHTML(t);
     const statParts = [];
     if (t.groupWins > 0) statParts.push(`${t.groupWins}W`);
     if (t.groupDraws > 0) statParts.push(`${t.groupDraws}D`);
-    if (roundBadges) statParts.push(roundBadges);
-    if (t.champion) statParts.push('Champion');
-    const statsText = statParts.length ? statParts.join(' · ') : 'Group stage';
+    const statsText = statParts.length ? statParts.join(' · ') : (!roundBadgesHTML ? 'Group stage' : '');
 
     const multBadge = t.multiplier > 1
       ? `<span class="badge tier-mult">${t.multiplier}x</span>`
@@ -138,7 +131,7 @@ function renderTopPerformers(data) {
         <div class="top-flag">${t.flag || '🌍'}</div>
         <div class="top-info">
           <div class="top-name">${escHtml(t.name)} ${multBadge}</div>
-          <div class="top-stats">${statsText}</div>
+          <div class="top-stats">${statsText}${statsText && roundBadgesHTML ? ' · ' : ''}${roundBadgesHTML}</div>
           <div class="top-owner">${t.owner.avatar} ${escHtml(t.owner.name)}</div>
         </div>
         <div class="top-pts-col">
@@ -261,15 +254,14 @@ const ROUND_META = {
 function teamStatusHTML(team) {
   if (team.champion) return '<span class="badge champion">🏆 Champion</span>';
 
-  // Show highest round reached
-  const ORDER = ['FINAL', 'SEMI_FINALS', 'QUARTER_FINALS', 'LAST_16', 'LAST_32'];
-  for (const r of ORDER) {
-    if (team.roundsAdvanced.includes(r)) {
+  const ORDER = ['LAST_32', 'LAST_16', 'QUARTER_FINALS', 'SEMI_FINALS', 'FINAL'];
+  const badges = ORDER
+    .filter(r => team.roundsAdvanced.includes(r))
+    .map(r => {
       const { label, cls } = ROUND_META[r];
       return `<span class="badge ${cls}">${label}</span>`;
-    }
-  }
-  return '';
+    });
+  return badges.join('');
 }
 
 function fmtPts(n) {

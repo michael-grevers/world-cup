@@ -163,14 +163,16 @@ async function getGoalData(force = false) {
 
 // ── Scoring ────────────────────────────────────────────────────────────────
 // Points earned for each round a team reaches (cumulative).
-// 2026 WC has an extra R32 before R16; awarding 1 pt for that new round.
+// LAST_32: 1 pt just for making the knockout stage.
+// Winning a R32 match earns an additional R32_WIN_PTS (tracked via match result
+// so the bonus appears immediately after R32 finishes, not after R16 is played).
 const ROUND_POINTS = {
   LAST_32:        1,
-  LAST_16:        3,
   QUARTER_FINALS: 6,
   SEMI_FINALS:    12,
   FINAL:          15,
 };
+const R32_WIN_PTS = 3;
 const CHAMPION_BONUS = 20;
 const GROUP_WIN_PTS = 1;
 const GROUP_DRAW_PTS = 0.5;
@@ -181,13 +183,18 @@ function scoreTeam(tla, matches) {
   let groupWins = 0;
   let groupDraws = 0;
   const roundsSeen = new Set();
+  let r32Wins = 0;
   let champion = false;
 
   for (const m of matches) {
-    if (m.status !== 'FINISHED') continue;
     const isHome = normTla(m.homeTeam?.tla) === t;
     const isAway = normTla(m.awayTeam?.tla) === t;
     if (!isHome && !isAway) continue;
+
+    // Award qualifying badge/point as soon as team appears in a knockout fixture
+    if (m.stage === 'LAST_32') roundsSeen.add('LAST_32');
+
+    if (m.status !== 'FINISHED') continue;
 
     const won =
       (isHome && m.score?.winner === 'HOME_TEAM') ||
@@ -197,15 +204,20 @@ function scoreTeam(tla, matches) {
     if (m.stage === 'GROUP_STAGE') {
       if (won) groupWins++;
       else if (drew) groupDraws++;
-    } else if (ROUND_POINTS[m.stage] !== undefined) {
-      roundsSeen.add(m.stage);
+    } else if (ROUND_POINTS[m.stage] !== undefined || m.stage === 'LAST_16') {
+      if (m.stage !== 'LAST_32') roundsSeen.add(m.stage);
+      if (m.stage === 'LAST_32' && won) {
+        r32Wins++;
+        roundsSeen.add('LAST_16'); // advanced to R16
+      }
       if (m.stage === 'FINAL' && won) champion = true;
     }
     // THIRD_PLACE match: no extra points (team already credited for SEMI_FINALS appearance)
   }
 
   let pts = groupWins * GROUP_WIN_PTS + groupDraws * GROUP_DRAW_PTS;
-  for (const r of roundsSeen) pts += ROUND_POINTS[r];
+  for (const r of roundsSeen) pts += ROUND_POINTS[r] ?? 0;
+  pts += r32Wins * R32_WIN_PTS;
   if (champion) pts += CHAMPION_BONUS;
 
   const roundsAdvanced = ['LAST_32', 'LAST_16', 'QUARTER_FINALS', 'SEMI_FINALS', 'FINAL']
